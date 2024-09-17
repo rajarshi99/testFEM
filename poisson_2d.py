@@ -116,14 +116,16 @@ class Poisson_2d:
         f_glob -= np.dot(K_known,self.u_known)
         self.clock_off()
 
+        self.K_glob = K_glob
+        self.f_glob = f_glob
         return K_glob, f_glob
 
-    def get_u_fem(self, K_glob, f_glob):
+    def get_u_fem(self):
         """
         Calls linear system solver and assembles u_sol
         """
         self.clock_on("Calling linear solver")
-        u_unknown = np.linalg.solve(K_glob,f_glob)        
+        u_unknown = np.linalg.solve(self.K_glob, self.f_glob)        
         self.clock_off()
 
         self.clock_on("Assembling u_sol")
@@ -132,14 +134,22 @@ class Poisson_2d:
         u_sol[self.vert_unknown_list] = u_unknown
         self.clock_off()
 
+        self.u_sol = u_sol
         return u_sol
 
     def sol_FEM(self):
-        K_glob, f_glob = self.get_K_f()
-        u_sol = self.get_u_fem(K_glob, f_glob)
-        return u_sol
+        self.get_K_f()
+        self.u_sol = self.get_u_fem()
+        return self.u_sol
 
-    def plot_on_grid(self, u_inp, title, fname, plot_with_lines = True):
+    def K_norm(self, v):
+        return v.dot(self.K_glob.dot(v))
+
+    def L2_norm(self, v):
+        # Just a placeholder
+        return np.linalg.norm(v)
+
+    def plot_on_mesh(self, u_inp, title = " ", fname = False, plot_with_lines = True):
         cplot = plt.tricontourf(self.triang, u_inp, levels = 100)
         plt.colorbar(cplot)
         if plot_with_lines:
@@ -147,5 +157,13 @@ class Poisson_2d:
         plt.xlabel('x')
         plt.ylabel('y')
         plt.title(title)
-        plt.savefig(fname)
-        plt.close()
+
+        if fname == False:
+            plt.show()
+        else:
+            plt.savefig(fname)
+            plt.close()
+
+    def plot_sol_on_mesh(self, title = " ", fname = False, plot_with_lines = True):
+        self.plot_on_mesh(self.u_sol, title = title, fname = fname, plot_with_lines = plot_with_lines)
+        
