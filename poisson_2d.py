@@ -165,5 +165,6 @@ class Poisson_2d:
             plt.close()
 
     def plot_sol_on_mesh(self, title = " ", fname = False, plot_with_lines = True):
+        # This line looks a little sad
         self.plot_on_mesh(self.u_sol, title = title, fname = fname, plot_with_lines = plot_with_lines)
         
