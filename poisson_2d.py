@@ -149,6 +149,10 @@ class Poisson_2d:
         # Just a placeholder
         return np.linalg.norm(v)
 
+    def h_values(self):
+        # A func to output the h value of each elem
+        print("Yet to be written")
+
     def plot_on_mesh(self, u_inp, title = " ", fname = False, plot_with_lines = True):
         cplot = plt.tricontourf(self.triang, u_inp, levels = 100)
         plt.colorbar(cplot)
