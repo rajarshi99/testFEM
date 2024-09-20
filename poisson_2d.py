@@ -143,15 +143,29 @@ class Poisson_2d:
         return self.u_sol
 
     def K_norm(self, v):
+        # Not sure if this is correct
         return v.dot(self.K_glob.dot(v))
 
-    def L2_norm(self, v):
+    def L2_err(self, v):
         # Just a placeholder
         return np.linalg.norm(v)
 
     def h_values(self):
         # A func to output the h value of each elem
-        print("Yet to be written")
+        h_vals = np.zeros(self.n_elems)
+        len_op3 = np.array([
+            [1, -1, 0],
+            [0, 1, -1],
+            [-1, 0, 1]])
+        tri_pairs = [(0,1), (1,2), (2,0)]
+        for e_id,vert_ids in enumerate(self.tri):
+            x_coords = self.x[vert_ids]
+            y_coords = self.y[vert_ids]
+            x_lens = np.dot(len_op3, x_coords)
+            y_lens = np.dot(len_op3, y_coords)
+            lens = np.sqrt(x_lens*x_lens + y_lens*y_lens)
+            h_vals[e_id] = np.max(lens)
+        return h_vals
 
     def plot_on_mesh(self, u_inp, title = " ", fname = False, plot_with_lines = True):
         cplot = plt.tricontourf(self.triang, u_inp, levels = 100)
