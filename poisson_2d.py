@@ -60,7 +60,7 @@ class Poisson_2d:
     def get_K_f(self):
         """
         Calculating global stiffness matrix and consistent load vector
-        considering 3 node triangles, using tested lines of code (BasicFEM).
+        considering 3 node triangles, using TWEAKED lines of code from my own older code
         """
         self.clock_on("Forming K and f as dict")
         K_glob_dict = {}
@@ -149,6 +149,10 @@ class Poisson_2d:
     def L2_err(self, v):
         # Just a placeholder
         return np.linalg.norm(v)
+
+    def l2_err(self, u_test):
+        # Not a good measure of error?
+        return np.linalg.norm(u_test - self.u_sol)
 
     def h_values(self):
         # A func to output the h value of each elem
