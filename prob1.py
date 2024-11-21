@@ -49,7 +49,7 @@ p_2d = Poisson_2d(domain, u, f)
 u_exct = u(x,y)
 p_2d.plot_on_mesh(u_exct, f"Exact solution {num_points}", f"{output_dir}u_exct_{num_points}.png")
 u_sol = p_2d.sol_FEM()
-p_2d.plot_on_mesh(u_exct, f"FEM solution {num_points}", f"{output_dir}u_fem_{num_points}.png")
+p_2d.plot_on_mesh(u_sol, f"FEM solution {num_points}", f"{output_dir}u_fem_{num_points}.png")
 p_2d.plot_on_mesh(u_exct - u_sol, f"Exact solution - FEM solution {num_points}", f"{output_dir}u_err_{num_points}.png")
 
 print(p_2d.time_logs)
